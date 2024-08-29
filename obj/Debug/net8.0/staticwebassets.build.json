@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "l1nQRzqN4cf/BMMTLijqAY6UTBDh4EeiPNOVxs3zePc=",
+  "Source": "ServerApi",
+  "BasePath": "_content/ServerApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ServerApi\\wwwroot",
+      "Source": "ServerApi",
+      "ContentRoot": "C:\\Users\\bagfu\\NET\\myapp\\gamedev\\ServerApi\\wwwroot\\",
+      "BasePath": "_content/ServerApi",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\bagfu\\NET\\myapp\\gamedev\\ServerApi\\wwwroot\\index.html",
+      "SourceId": "ServerApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\bagfu\\NET\\myapp\\gamedev\\ServerApi\\wwwroot\\",
+      "BasePath": "_content/ServerApi",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}
