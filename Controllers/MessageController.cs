@@ -4,11 +4,20 @@ using System.Threading.Tasks;
 
 namespace ServerApi.Controllers
 {
+    public class KeyPressModel
+    {
+        public bool IsPressed { get; set; }
+        public string Key { get; set; }
+        public string Timestamp { get; set; }
+    }
+
+    [ApiController]
+    [Route("api/[controller]")]
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private static List<string> _messages = new List<string>();
+        private static List<KeyPressModel> _messages = new List<KeyPressModel>();
 
         // GET isteði ile tüm mesajlarý döndür
         [HttpGet]
@@ -19,10 +28,10 @@ namespace ServerApi.Controllers
 
         // POST isteði ile yeni mesajý al ve listeye ekle
         [HttpPost]
-        public IActionResult Post([FromBody] string message)
+        public IActionResult Post([FromBody] KeyPressModel keyPress)
         {
-            _messages.Add(message);
-            Console.WriteLine(message);
+            _messages.Add(keyPress);
+            Console.WriteLine($"{keyPress.IsPressed}, {keyPress.Key}, {keyPress.Timestamp}");
             return Ok("Message received!");
         }
 
@@ -39,7 +48,7 @@ namespace ServerApi.Controllers
                 if (Response.HttpContext.RequestAborted.IsCancellationRequested)
                     break;
 
-                var message = string.Join("\n", _messages);
+                var message = string.Join("\n", _messages.Select(m => $"{m.IsPressed}, {m.Key}, {m.Timestamp}"));
                 await Response.WriteAsync($"data: {message}\n\n");
                 await Response.Body.FlushAsync();
 
@@ -47,4 +56,5 @@ namespace ServerApi.Controllers
             }
         }
     }
+
 }
