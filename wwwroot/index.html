@@ -12,19 +12,27 @@
         async function fetchData() {
             try {
                 const response = await fetch('/api/message');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
                 const data = await response.json();
-                document.getElementById('message').innerText = data.join('\n'); // Verileri uygun şekilde birleştirin
+
+                if (data.length > 0) {
+                    // Son mesajı göster
+                    const lastMessage = data[data.length - 1];
+                    document.getElementById('message').innerText = JSON.stringify(lastMessage);
+                } else {
+                    // Mesaj yoksa uygun bir mesaj göster
+                    document.getElementById('message').innerText = 'No messages available.';
+                }
             } catch (error) {
-                console.error('Veri çekme hatası:', error);
-                document.getElementById('message').innerText = 'Veri yüklenirken hata oluştu.';
+                console.error('Error fetching data:', error);
+                document.getElementById('message').innerText = 'Error fetching data.';
             }
         }
 
-        // Veri çekme işlemini her 50 milisaniyede bir yapın
+        // Veriyi 50 ms'de bir yenile
         setInterval(fetchData, 50);
+
+        // Sayfa yüklendiğinde ilk veri çek
+        fetchData();
     </script>
 </body>
 </html>
