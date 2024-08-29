@@ -9,16 +9,22 @@
     <div id="message"></div>
 
     <script>
-        const eventSource = new EventSource('/api/message/stream');
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/message');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('message').innerText = data.join('\n'); // Verileri uygun şekilde birleştirin
+            } catch (error) {
+                console.error('Veri çekme hatası:', error);
+                document.getElementById('message').innerText = 'Veri yüklenirken hata oluştu.';
+            }
+        }
 
-        eventSource.onmessage = function (event) {
-            document.getElementById('message').innerText = event.data;
-        };
-
-        eventSource.onerror = function (event) {
-            console.error('Hata oluştu:', event);
-            document.getElementById('message').innerText = 'Veri yüklenirken hata oluştu.';
-        };
+        // Veri çekme işlemini her 50 milisaniyede bir yapın
+        setInterval(fetchData, 50);
     </script>
 </body>
 </html>
