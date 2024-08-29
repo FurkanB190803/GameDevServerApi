@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServerApi.Controllers
@@ -11,8 +12,6 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
-    [ApiController]
-    [Route("api/[controller]")]
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
@@ -30,6 +29,11 @@ namespace ServerApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] KeyPressModel keyPress)
         {
+            if (keyPress == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
             _messages.Add(keyPress);
             Console.WriteLine($"{keyPress.IsPressed}, {keyPress.Key}, {keyPress.Timestamp}");
             return Ok("Message received!");
@@ -48,7 +52,8 @@ namespace ServerApi.Controllers
                 if (Response.HttpContext.RequestAborted.IsCancellationRequested)
                     break;
 
-                var message = string.Join("\n", _messages.Select(m => $"{m.IsPressed}, {m.Key}, {m.Timestamp}"));
+                var messages = _messages.Select(m => $"{m.IsPressed}, {m.Key}, {m.Timestamp}");
+                var message = string.Join("\n", messages);
                 await Response.WriteAsync($"data: {message}\n\n");
                 await Response.Body.FlushAsync();
 
@@ -56,5 +61,4 @@ namespace ServerApi.Controllers
             }
         }
     }
-
 }
