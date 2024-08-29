@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>API Data</title>
 </head>
 <body>
-    <h1>Welcome to the API</h1>
+    <div id="message"></div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/message');
+                const data = await response.json();
+                document.getElementById('message').innerText = data.message;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Her 50 milisaniyede bir veri çekmeyi dene
+        setInterval(fetchData, 50);
+    </script>
 </body>
 </html>
