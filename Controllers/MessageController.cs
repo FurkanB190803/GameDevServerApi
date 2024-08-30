@@ -78,9 +78,10 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
-            _mouseData.Add(mouseData);
+            // Ýþlem yap
             return Ok("Mouse data received!");
         }
+
         [HttpGet("mousses")]
         public IActionResult GetMousses()
         {
