@@ -62,7 +62,7 @@ namespace ServerApi.Controllers
         }
 
         // POST: api/message/mouse
-        [HttpPost("mouse")]
+        /*[HttpPost("mouse")]
         public IActionResult PostMouseData([FromBody] MouseDataModel mouseData)
         {
             if (mouseData == null)
@@ -73,7 +73,7 @@ namespace ServerApi.Controllers
             _mouseData.Add(mouseData);
             return Ok("Mouse data received!");
         }
-
+        
         // POST: api/message/camera
         [HttpPost("camera")]
         public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
@@ -85,7 +85,7 @@ namespace ServerApi.Controllers
 
             _cameraData.Add(cameraData);
             return Ok("Camera data received!");
-        }
+        }*/
     }
 
 
