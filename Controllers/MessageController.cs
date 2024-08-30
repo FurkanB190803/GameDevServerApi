@@ -1,97 +1,78 @@
-using System.Collections;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
-using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class KeySender : MonoBehaviour
+namespace ServerApi.Controllers
 {
-    private string keyPressUrl = "https://app-fe15f6b4-ff30-45f9-acff-a6015aba674a.cleverapps.io/api/message/keypress";
-    private string mouseUrl = "https://app-fe15f6b4-ff30-45f9-acff-a6015aba674a.cleverapps.io/api/message/mouse";
-    private string cameraUrl = "https://app-fe15f6b4-ff30-45f9-acff-a6015aba674a.cleverapps.io/api/message/camera";
-
-    private Transform cameraTransform;
-    private Dictionary<KeyCode, bool> keyStates = new Dictionary<KeyCode, bool>();
-
-    private void Start()
+    public class KeyPressModel
     {
-        // Kameranýn Transform komponentini al
-        cameraTransform = Camera.main.transform;
+        public bool IsPressed { get; set; }
+        public string Key { get; set; }
+        public string Timestamp { get; set; }
     }
 
-    void Update()
+    public class MouseDataModel
     {
-        // WASD ve ok tuþlarýný kontrol et
-        foreach (KeyCode key in keyStates.Keys)
-        {
-            bool isKeyPressed = Input.GetKey(key);
+        public float MouseX { get; set; }
+        public float MouseY { get; set; }
+        public string Timestamp { get; set; }
+    }
 
-            if (isKeyPressed && !keyStates.ContainsKey(key))
+    public class CameraDataModel
+    {
+        public Vector3 CameraPosition { get; set; }
+        public Vector3 CameraRotation { get; set; }
+        public string Timestamp { get; set; }
+    }
+
+    [ApiController]
+    [Route("api/[controller]")]
+    public class MessageController : ControllerBase
+    {
+        private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
+        private static List<MouseDataModel> _mouseData = new List<MouseDataModel>();
+        private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
+
+        // POST: api/message/keypress
+        [HttpPost("keypress")]
+        public IActionResult PostKeyPress([FromBody] KeyPressModel keyPress)
+        {
+            if (keyPress == null)
             {
-                // Tuþ ilk kez basýldýðýnda
-                keyStates[key] = true;
-                StartCoroutine(SendKeyPress(true, key.ToString()));
+                return BadRequest("Invalid input");
             }
-            else if (!isKeyPressed && keyStates.ContainsKey(key))
-            {
-                // Tuþ býrakýldýðýnda
-                keyStates.Remove(key);
-                StartCoroutine(SendKeyPress(false, key.ToString()));
-            }
+
+            _keyPresses.Add(keyPress);
+            return Ok("KeyPress received!");
         }
 
-        // Kamera pozisyonu, rotasyonu ve mouse hareketini gönder
-        StartCoroutine(SendCameraData());
-        StartCoroutine(SendMouseData());
-    }
-
-    IEnumerator SendKeyPress(bool isPressed, string key)
-    {
-        string timestamp = DateTime.Now.ToString("o"); // ISO 8601 formatý
-
-        string json = $"{{\"isPressed\": {isPressed.ToString().ToLower()}, \"key\": \"{key}\", \"timestamp\": \"{timestamp}\"}}";
-        yield return SendRequest(keyPressUrl, json);
-    }
-
-    IEnumerator SendMouseData()
-    {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-        string timestamp = DateTime.Now.ToString("o");
-
-        string json = $"{{\"mouseX\": {mouseX}, \"mouseY\": {mouseY}, \"timestamp\": \"{timestamp}\"}}";
-        yield return SendRequest(mouseUrl, json);
-    }
-
-    IEnumerator SendCameraData()
-    {
-        Vector3 position = cameraTransform.position;
-        Vector3 rotation = cameraTransform.eulerAngles;
-        string timestamp = DateTime.Now.ToString("o");
-
-        string json = $"{{\"cameraPosition\": {{\"x\": {position.x}, \"y\": {position.y}, \"z\": {position.z}}}, \"cameraRotation\": {{\"x\": {rotation.x}, \"y\": {rotation.y}, \"z\": {rotation.z}}}, \"timestamp\": \"{timestamp}\"}}";
-        yield return SendRequest(cameraUrl, json);
-    }
-
-    IEnumerator SendRequest(string url, string json)
-    {
-        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        // POST: api/message/mouse
+        [HttpPost("mouse")]
+        public IActionResult PostMouseData([FromBody] MouseDataModel mouseData)
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
+            if (mouseData == null)
             {
-                Debug.Log($"POST Response: {request.downloadHandler.text}");
+                return BadRequest("Invalid input");
             }
-            else
+
+            _mouseData.Add(mouseData);
+            return Ok("Mouse data received!");
+        }
+
+        // POST: api/message/camera
+        [HttpPost("camera")]
+        public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
+        {
+            if (cameraData == null)
             {
-                Debug.LogError($"POST Error: {request.error} - Response: {request.downloadHandler.text}");
+                return BadRequest("Invalid input");
             }
+
+            _cameraData.Add(cameraData);
+            return Ok("Camera data received!");
         }
     }
+
+
 }
