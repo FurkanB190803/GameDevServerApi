@@ -12,53 +12,67 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
+    public class MouseDataModel
+    {
+        public float MouseX { get; set; }
+        public float MouseY { get; set; }
+        public string Timestamp { get; set; }
+    }
+
+    public class CameraDataModel
+    {
+        public Vector3 CameraPosition { get; set; }
+        public Vector3 CameraRotation { get; set; }
+        public string Timestamp { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private static List<KeyPressModel> _messages = new List<KeyPressModel>();
+        private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
+        private static List<MouseDataModel> _mouseData = new List<MouseDataModel>();
+        private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
 
-        // GET isteði ile tüm mesajlarý döndür
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(_messages);
-        }
-
-        // POST isteði ile yeni mesajý al ve listeye ekle
-        [HttpPost]
-        public IActionResult Post([FromBody] KeyPressModel keyPress)
+        // POST: api/message/keypress
+        [HttpPost("keypress")]
+        public IActionResult PostKeyPress([FromBody] KeyPressModel keyPress)
         {
             if (keyPress == null)
             {
                 return BadRequest("Invalid input");
             }
 
-            _messages.Add(keyPress);
-            Console.WriteLine($"{keyPress.IsPressed}, {keyPress.Key}, {keyPress.Timestamp}");
-            return Ok("Message received!");
+            _keyPresses.Add(keyPress);
+            return Ok("KeyPress received!");
         }
 
-        // SSE endpoint'i ile mesajlarý stream et
-        [HttpGet("stream")]
-        public async Task Stream()
+        // POST: api/message/mouse
+        [HttpPost("mouse")]
+        public IActionResult PostMouseData([FromBody] MouseDataModel mouseData)
         {
-            Response.ContentType = "text/event-stream";
-            Response.Headers.Add("Cache-Control", "no-cache");
-            Response.Headers.Add("Connection", "keep-alive");
-
-            while (true)
+            if (mouseData == null)
             {
-                if (Response.HttpContext.RequestAborted.IsCancellationRequested)
-                    break;
-
-                var messages = _messages.Select(m => $"{m.IsPressed}, {m.Key}, {m.Timestamp}");
-                var message = string.Join("\n", messages);
-                await Response.WriteAsync($"data: {message}\n\n");
-                await Response.Body.FlushAsync();
-
-                await Task.Delay(50); // 50 ms gecikme
+                return BadRequest("Invalid input");
             }
+
+            _mouseData.Add(mouseData);
+            return Ok("Mouse data received!");
+        }
+
+        // POST: api/message/camera
+        [HttpPost("camera")]
+        public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
+        {
+            if (cameraData == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            _cameraData.Add(cameraData);
+            return Ok("Camera data received!");
         }
     }
+
 }
+a
