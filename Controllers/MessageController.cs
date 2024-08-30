@@ -49,7 +49,7 @@ namespace ServerApi.Controllers
         private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
 
         // POST: api/message/keypress
-       / POST: api/message/keypress
+      
         [HttpPost("keypress")]
         public IActionResult PostKeyPress([FromBody] KeyPressModel keyPress)
         {
