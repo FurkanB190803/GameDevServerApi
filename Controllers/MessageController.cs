@@ -49,6 +49,7 @@ namespace ServerApi.Controllers
         private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
 
         // POST: api/message/keypress
+       / POST: api/message/keypress
         [HttpPost("keypress")]
         public IActionResult PostKeyPress([FromBody] KeyPressModel keyPress)
         {
@@ -59,6 +60,13 @@ namespace ServerApi.Controllers
 
             _keyPresses.Add(keyPress);
             return Ok("KeyPress received!");
+        }
+
+        // GET: api/message/keypresses
+        [HttpGet("keypresses")]
+        public IActionResult GetKeyPresses()
+        {
+            return Ok(_keyPresses);
         }
 
         // POST: api/message/mouse
