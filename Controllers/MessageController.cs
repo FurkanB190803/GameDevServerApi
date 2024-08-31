@@ -5,20 +5,7 @@ using System.Threading.Tasks;
 
 namespace ServerApi.Controllers
 {
-    public class Vector3
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
-
-        public Vector3(float x, float y, float z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
-    }
-
+    
     public class KeyPressModel
     {
         public bool IsPressed { get; set; }
@@ -30,8 +17,12 @@ namespace ServerApi.Controllers
 
     public class CameraDataModel
     {
-        public Vector3 CameraPosition { get; set; }
-        public Vector3 CameraRotation { get; set; }
+        public float px { get; set; }
+        public float py { get; set; }
+        public float pz { get; set; }
+        public float cx { get; set; }
+        public float cy { get; set; }
+        public float cz { get; set; }
         public string Timestamp { get; set; }
     }
 
