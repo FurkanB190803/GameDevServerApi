@@ -26,12 +26,7 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
-    public class MouseDataModel
-    {
-        public float MouseX { get; set; }
-        public float MouseY { get; set; }
-        public string Timestamp { get; set; }
-    }
+  
 
     public class CameraDataModel
     {
@@ -45,7 +40,7 @@ namespace ServerApi.Controllers
     public class MessageController : ControllerBase
     {
         private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
-        private static List<MouseDataModel> _mouseData = new List<MouseDataModel>();
+     
         private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
 
         // POST: api/message/keypress
@@ -72,15 +67,16 @@ namespace ServerApi.Controllers
     
       
         [HttpGet("cameras")]
-        public IActionResult GetMousses()
+        public IActionResult GetCamera()
         {
-            return Ok(_mouseData);
+            return Ok(_cameraData);
         }
         
         // POST: api/message/camera
         [HttpPost("camera")]
         public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
         {
+
             if (cameraData == null)
             {
                 return BadRequest("Invalid input");
