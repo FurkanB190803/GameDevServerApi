@@ -17,12 +17,12 @@ namespace ServerApi.Controllers
 
     public class CameraDataModel
     {
-        public float px { get; set; }
-        public float py { get; set; }
-        public float pz { get; set; }
-        public float cx { get; set; }
-        public float cy { get; set; }
-        public float cz { get; set; }
+        public string px { get; set; }
+        public string py { get; set; }
+        public string pz { get; set; }
+        public string cx { get; set; }
+        public string cy { get; set; }
+        public string cz { get; set; }
         public string Timestamp { get; set; }
     }
 
