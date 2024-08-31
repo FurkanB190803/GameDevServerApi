@@ -26,7 +26,20 @@ namespace ServerApi.Controllers
         public string Timestamp { get; set; }
     }
 
-   
+
+    [ApiController]
+    [Route("ping/[controller]")]
+    public class PingController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Ping()
+        {
+            // Ping isteði alýndý, herhangi bir iþlem yapmadan hýzlýca yanýt ver
+            return Ok(new { message = "Pong", timestamp = DateTime.UtcNow });
+        }
+    }
+    
+
 
     [ApiController]
     [Route("api/[controller]")]
