@@ -69,25 +69,14 @@ namespace ServerApi.Controllers
             return Ok(_keyPresses);
         }
 
-        // POST: api/message/mouse
-        [HttpPost("mouse")]
-        public IActionResult PostMouseData([FromBody] MouseDataModel mouseData)
-        {
-            if (mouseData == null)
-            {
-                return BadRequest("Invalid input");
-            }
-
-            // Ýþlem yap
-            return Ok("Mouse data received!");
-        }
-
-        [HttpGet("mousses")]
+    
+      
+        [HttpGet("cameras")]
         public IActionResult GetMousses()
         {
             return Ok(_mouseData);
         }
-        /*
+        
         // POST: api/message/camera
         [HttpPost("camera")]
         public IActionResult PostCameraData([FromBody] CameraDataModel cameraData)
@@ -99,7 +88,7 @@ namespace ServerApi.Controllers
 
             _cameraData.Add(cameraData);
             return Ok("Camera data received!");
-        }*/
+        }
     }
 
 
