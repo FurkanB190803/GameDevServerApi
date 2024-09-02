@@ -6,15 +6,25 @@ using System.Threading.Tasks;
 namespace ServerApi.Controllers
 {
     
-    public class KeyPressModel
+   /* public class KeyPressModel
     {
         public bool IsPressed { get; set; }
         public string Key { get; set; }
         public string Timestamp { get; set; }
+    }*/
+    public class KeyPressData
+    {
+        public string keyCode;
+        public List<string> pressTimes = new List<string>();
+        public List<string> releaseTimes = new List<string>();
     }
-
-
-
+    public class MouseMovementData
+    {
+        public string timestamp;
+        public float deltaX;
+        public float deltaY;
+    }
+/*
     public class CameraDataModel
     {
         public string px { get; set; }
@@ -25,7 +35,7 @@ namespace ServerApi.Controllers
         public string cz { get; set; }
         public string Timestamp { get; set; }
     }
-
+*/
 
     [ApiController]
     [Route("ping/[controller]")]
@@ -45,9 +55,59 @@ namespace ServerApi.Controllers
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
+        //private static List<KeyPressModel> _keyPresses = new List<KeyPressModel>();
 
-        private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
+        //private static List<CameraDataModel> _cameraData = new List<CameraDataModel>();
+
+        private static List<KeyPressData> _keyPressData = new List<KeyPressData>();
+
+        private static List<MouseMovementData> _mouseMovementData = new List<MouseMovementData>();
+
+
+        [HttpPost("KeyInput")]
+        public IActionResult PostKeyInput([FromBody] KeyPressData keyPressData)
+        {
+            if (keyPressData == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            _keyPressData.Add(keyPressData);
+            return Ok("KeyPress received!");
+        }
+
+
+        [HttpPost("MouseInput")]
+        public IActionResult PostMouseInput([FromBody] MouseMovementData mouseMovementData)
+        {
+            if (mouseMovementData == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            _mouseMovementData.Add(mouseMovementData);
+            return Ok("KeyPress received!");
+        }
+
+        [HttpGet("getKeyInput")]
+        public IActionResult GetKeyInput()
+        {
+            return Ok(_keyPressData);
+        }
+        [HttpGet("getMouseInput")]
+        public IActionResult GetMouseInput()
+        {
+            return Ok(_mouseMovementData);
+        }
+
+
+
+
+
+
+
+
+        /*
 
         // POST: api/message/keypress
 
@@ -70,7 +130,7 @@ namespace ServerApi.Controllers
             return Ok(_keyPresses);
         }
 
-    
+
       
         [HttpGet("cameras")]
         public IActionResult GetCamera()
@@ -92,7 +152,7 @@ namespace ServerApi.Controllers
 
             _cameraData.Add(cameraData);
             return Ok("Kamera verisi alýndý!");
-        }
+        }*/
     }
 
 
