@@ -47,7 +47,7 @@ namespace ServerApi.Controllers
             // Log the received data
             Console.WriteLine($"keyPressData: {keyPressData}");
 
-            _keyPressData.Add(keyPressData);
+            _keyPressData=(keyPressData);
             return Ok("KeyPress received!");
         }
 
