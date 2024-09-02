@@ -44,8 +44,11 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
-            // Log the received data
-            Console.WriteLine($"keyPressData: {keyPressData}");
+            [HttpGet("d")]
+            public IActionResult GetKeyInput()
+            {
+                return Ok(keyPressData);
+            }
 
             _keyPressData.Add(keyPressData);
             return Ok("KeyPress received!");
@@ -69,7 +72,7 @@ namespace ServerApi.Controllers
         [HttpGet("getKeyInput")]
         public IActionResult GetKeyInput()
         {
-            return Ok("ddd");
+            return Ok(_keyPressData);
         }
 
         [HttpGet("getMouseInput")]
