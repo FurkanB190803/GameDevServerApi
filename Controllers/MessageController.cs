@@ -1,81 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System;
 
 namespace ServerApi.Controllers
 {
-    public class KeyPressData
-    {
-        public string keyCode { get; set; }
-        public List<string> pressTimes { get; set; } = new List<string>();
-        public List<string> releaseTimes { get; set; } = new List<string>();
-    }
-
-    public class MouseMovementData
-    {
-        public string timestamp { get; set; }
-        public float deltaX { get; set; }
-        public float deltaY { get; set; }
-    }
-
-    [ApiController]
-    [Route("ping/[controller]")]
-    public class PingController : ControllerBase
-    {
-        [HttpGet]
-        public IActionResult Ping()
-        {
-            return Ok(new { message = "Pong", timestamp = DateTime.UtcNow });
-        }
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private static List<KeyPressData> _keyPressData = new List<KeyPressData>();
-        public List<MouseMovementData> mouseMovementDataList = new List<MouseMovementData>();
+        // In-memory storage for demonstration
+        private static List<KeyPressData> keyPressDataStorage = new List<KeyPressData>();
+        private static List<MouseMovementData> mouseMovementDataStorage = new List<MouseMovementData>();
 
+        // POST: api/message/KeyInput
         [HttpPost("KeyInput")]
-        public IActionResult PostKeyInput([FromBody] KeyPressData keyPressData)
+        public IActionResult ReceiveKeyInput([FromBody] KeyPressDataWrapper dataWrapper)
         {
-            if (keyPressData == null)
-            {
-                return BadRequest("Invalid input");
-            }
+            if (dataWrapper == null || dataWrapper.KeyPressDataList == null)
+                return BadRequest("Invalid data");
 
-            // Log the received data
-            Console.WriteLine($"keyPressData: {keyPressData}");
-
-            _keyPressData=(keyPressData);
-            return Ok("KeyPress received!");
+            keyPressDataStorage.AddRange(dataWrapper.KeyPressDataList);
+            return Ok(new { Message = "Key input data received successfully" });
         }
 
+        // POST: api/message/MouseInput
         [HttpPost("MouseInput")]
-        public IActionResult PostMouseInput([FromBody] MouseMovementData mouseMovementData)
+        public IActionResult ReceiveMouseInput([FromBody] MouseMovementDataWrapper dataWrapper)
         {
-            if (mouseMovementData == null)
-            {
-                return BadRequest("Invalid input");
-            }
+            if (dataWrapper == null || dataWrapper.MouseMovementDataList == null)
+                return BadRequest("Invalid data");
 
-            // Log the received data
-            Console.WriteLine($"MouseInput: {mouseMovementData}");
-
-            mouseMovementDataList.Add(mouseMovementData);
-            return Ok("MouseInput received!");
+            mouseMovementDataStorage.AddRange(dataWrapper.MouseMovementDataList);
+            return Ok(new { Message = "Mouse input data received successfully" });
         }
 
-        [HttpGet("getKeyInput")]
+        // GET: api/message/KeyInput
+        [HttpGet("KeyInput")]
         public IActionResult GetKeyInput()
         {
-            return Ok(_keyPressData);
+            return Ok(keyPressDataStorage);
         }
 
-        [HttpGet("getMouseInput")]
+        // GET: api/message/MouseInput
+        [HttpGet("MouseInput")]
         public IActionResult GetMouseInput()
         {
-            return Ok(mouseMovementDataList);
+            return Ok(mouseMovementDataStorage);
         }
     }
 }
