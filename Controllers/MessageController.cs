@@ -18,8 +18,10 @@ namespace ServerApi.Controllers
             if (dataWrapper == null || dataWrapper.KeyPressDataList == null)
                 return BadRequest("Invalid data");
 
-            keyPressDataStorage.AddRange(dataWrapper.KeyPressDataList);
-            return Ok(new { Message = "Key input data received successfully" });
+            // Veriyi atama yaparak güncelle
+            keyPressDataStorage = new List<KeyPressData>(dataWrapper.KeyPressDataList);
+
+            return Ok(new { Message = "Key input data received and updated successfully" });
         }
 
         // POST: api/message/MouseInput
@@ -29,8 +31,10 @@ namespace ServerApi.Controllers
             if (dataWrapper == null || dataWrapper.MouseMovementDataList == null)
                 return BadRequest("Invalid data");
 
-            mouseMovementDataStorage.AddRange(dataWrapper.MouseMovementDataList);
-            return Ok(new { Message = "Mouse input data received successfully" });
+            // Veriyi atama yaparak güncelle
+            mouseMovementDataStorage = new List<MouseMovementData>(dataWrapper.MouseMovementDataList);
+
+            return Ok(new { Message = "Mouse input data received and updated successfully" });
         }
 
         // GET: api/message/KeyInput
