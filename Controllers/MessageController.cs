@@ -6,6 +6,7 @@ using System;
 
 namespace ServerApi.Controllers
 {
+    [Serializable]
     public class KeyPressData
     {
         public string keyCode;
@@ -13,12 +14,14 @@ namespace ServerApi.Controllers
         public List<string> releaseTimes = new List<string>();
     }
 
+    [Serializable]
     public class MouseMovementData
     {
         public string timestamp;
         public float deltaX;
         public float deltaY;
     }
+
 
     [ApiController]
     [Route("ping/[controller]")]
@@ -108,3 +111,4 @@ namespace ServerApi.Controllers
         }
     }
 }
+    
