@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System;
 
 namespace ServerApi.Controllers
 {
-    [Serializable]
     public class KeyPressData
     {
-        public string keyCode;
-        public List<string> pressTimes = new List<string>();
-        public List<string> releaseTimes = new List<string>();
+        public string keyCode { get; set; }
+        public List<string> pressTimes { get; set; } = new List<string>();
+        public List<string> releaseTimes { get; set; } = new List<string>();
     }
 
-    [Serializable]
     public class MouseMovementData
     {
-        public string timestamp;
-        public float deltaX;
-        public float deltaY;
+        public string timestamp { get; set; }
+        public float deltaX { get; set; }
+        public float deltaY { get; set; }
     }
-
 
     [ApiController]
     [Route("ping/[controller]")]
@@ -30,7 +25,6 @@ namespace ServerApi.Controllers
         [HttpGet]
         public IActionResult Ping()
         {
-            // Ping isteði alýndý, herhangi bir iþlem yapmadan hýzlýca yanýt ver
             return Ok(new { message = "Pong", timestamp = DateTime.UtcNow });
         }
     }
@@ -50,12 +44,10 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
+            // Log the received data
             Console.WriteLine($"keyPressData: {keyPressData}");
 
             _keyPressData.Add(keyPressData);
-
-            
-
             return Ok("KeyPress received!");
         }
 
@@ -67,45 +59,23 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
+            // Log the received data
             Console.WriteLine($"MouseInput: {mouseMovementData}");
 
             _mouseMovementData.Add(mouseMovementData);
-
-            // Log the received data
-          
-
             return Ok("MouseInput received!");
         }
 
         [HttpGet("getKeyInput")]
         public IActionResult GetKeyInput()
         {
-            // Log the data being sent
-            Console.WriteLine("Getting KeyInput:");
-            foreach (var data in _keyPressData)
-            {
-                Console.WriteLine($"KeyCode: {data.keyCode}");
-                Console.WriteLine($"Press Times: {string.Join(", ", data.pressTimes)}");
-                Console.WriteLine($"Release Times: {string.Join(", ", data.releaseTimes)}");
-            }
-
             return Ok(_keyPressData);
         }
 
         [HttpGet("getMouseInput")]
         public IActionResult GetMouseInput()
         {
-            // Log the data being sent
-            Console.WriteLine("Getting MouseInput:");
-            foreach (var data in _mouseMovementData)
-            {
-                Console.WriteLine($"Timestamp: {data.timestamp}");
-                Console.WriteLine($"DeltaX: {data.deltaX}");
-                Console.WriteLine($"DeltaY: {data.deltaY}");
-            }
-
             return Ok(_mouseMovementData);
         }
     }
 }
-    
