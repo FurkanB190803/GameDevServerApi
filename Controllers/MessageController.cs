@@ -50,13 +50,11 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
+            Console.WriteLine($"keyPressData: {keyPressData}");
+
             _keyPressData.Add(keyPressData);
 
-            // Log the received data
-            Console.WriteLine("KeyInput received:");
-            Console.WriteLine($"KeyCode: {keyPressData.keyCode}");
-            Console.WriteLine($"Press Times: {string.Join(", ", keyPressData.pressTimes)}");
-            Console.WriteLine($"Release Times: {string.Join(", ", keyPressData.releaseTimes)}");
+            
 
             return Ok("KeyPress received!");
         }
@@ -69,13 +67,12 @@ namespace ServerApi.Controllers
                 return BadRequest("Invalid input");
             }
 
+            Console.WriteLine($"MouseInput: {mouseMovementData}");
+
             _mouseMovementData.Add(mouseMovementData);
 
             // Log the received data
-            Console.WriteLine("MouseInput received:");
-            Console.WriteLine($"Timestamp: {mouseMovementData.timestamp}");
-            Console.WriteLine($"DeltaX: {mouseMovementData.deltaX}");
-            Console.WriteLine($"DeltaY: {mouseMovementData.deltaY}");
+          
 
             return Ok("MouseInput received!");
         }
