@@ -69,7 +69,7 @@ namespace ServerApi.Controllers
         [HttpGet("getKeyInput")]
         public IActionResult GetKeyInput()
         {
-            return Ok(_keyPressData);
+            return Ok("ddd");
         }
 
         [HttpGet("getMouseInput")]
