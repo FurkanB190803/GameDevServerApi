@@ -34,7 +34,7 @@ namespace ServerApi.Controllers
     public class MessageController : ControllerBase
     {
         private static List<KeyPressData> _keyPressData = new List<KeyPressData>();
-        private static List<MouseMovementData> _mouseMovementData = new List<MouseMovementData>();
+        public List<MouseMovementData> mouseMovementDataList = new List<MouseMovementData>();
 
         [HttpPost("KeyInput")]
         public IActionResult PostKeyInput([FromBody] KeyPressData keyPressData)
@@ -62,7 +62,7 @@ namespace ServerApi.Controllers
             // Log the received data
             Console.WriteLine($"MouseInput: {mouseMovementData}");
 
-            _mouseMovementData.Add(mouseMovementData);
+            mouseMovementDataList.Add(mouseMovementData);
             return Ok("MouseInput received!");
         }
 
@@ -75,7 +75,7 @@ namespace ServerApi.Controllers
         [HttpGet("getMouseInput")]
         public IActionResult GetMouseInput()
         {
-            return Ok(_mouseMovementData);
+            return Ok(mouseMovementDataList);
         }
     }
 }
